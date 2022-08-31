@@ -10,7 +10,12 @@ states:
     function: ansible
     input:
       commands:
-      - command: Example of running ansible
+      - command: ansible-playbook playbook.yaml
+      files:
+      - data: "---\n- name: \"Ansible Playbook\"\n  hosts: localhost\n  connection:
+          local \n  tasks:\n  - name: \"ls on localhost\"\n    shell: \"ls -l\"\n
+          \   register: \"output\"\n"
+        name: playbook.yaml
   transition: state1
 - id: state1
   type: action
@@ -18,8 +23,18 @@ states:
     function: ansible
     input:
       commands:
-      - command: Example of running ansible
-      files:
-      - data: Hello World
-        mode: "0755"
-        name: hello.txt
+      - command: ansible-playbook playbook.yaml
+    files:
+    - key: playbook.yaml
+      scope: workflow
+  transition: state2
+- id: state2
+  type: action
+  action:
+    function: ansible
+    input:
+      commands:
+      - command: ansible-config view
+    files:
+    - key: ansible.cfg
+      scope: workflow
