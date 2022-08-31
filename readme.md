@@ -14,7 +14,14 @@ Run ansible in Direktiv
 
 ## About ansible
 
-Run ansible in Direktiv as a function ansible 2.13.3 gcp, azure, aws
+This function provides Ansible in Direktiv. Ansible version 2.13.3 is installed with the following modules:
+- amazon.aws
+- google.cloud
+- azure.azcollection
+
+
+
+The default configuration in `ansible.cfg` can be overwritten with either DirektivFiles or Direktiv variables.
 
 ### Example(s)
   #### Function Configuration
@@ -39,7 +46,6 @@ functions:
             hosts: localhost
             connection: local 
             tasks:
-
             - name: "ls on localhost"
               shell: "ls -l"
               register: "output"
@@ -58,6 +64,19 @@ functions:
     input:
       commands:
       - command: ansible-playbook playbook.yaml
+```
+   #### Custom ansible.cfg
+```yaml
+- id: ansible
+  type: action
+  action:
+    function: ansible
+    files: 
+    - key: ansible.cfg
+      scope: workflow
+    input:
+      commands:
+      - command: ansible-config view
 ```
 
    ### Secrets

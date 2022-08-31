@@ -10,14 +10,23 @@ info:
     issues: https://github.com/direktiv-apps/ansible/issues
     url: https://github.com/direktiv-apps/ansible  
     categories:
-    - build
-    - infrastructure
+    - unknown
     license: |-
       [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
     long-description: >-
-      Run ansible in Direktiv as a function
-      ansible 2.13.3
-      gcp, azure, aws
+      This function provides Ansible in Direktiv. Ansible version 2.13.3 is installed with the following modules:
+
+      - amazon.aws
+
+      - google.cloud
+
+      - azure.azcollection
+
+
+
+
+      The default configuration in `ansible.cfg` can be overwritten with either DirektivFiles or Direktiv variables.
+
 consumes:
 - application/json
 produces:
@@ -29,7 +38,12 @@ paths:
     delete:
       parameters:
         - name: Direktiv-ActionID
-          in: headerunknown
+          in: header
+          type: string
+          description: |
+            On cancel Direktiv sends a DELETE request to
+            the action with id in the header
+      x-direktiv:
         cancel: echo 'cancel {{ .DirektivActionID }}'
       responses:
         200:
@@ -42,7 +56,7 @@ paths:
           description: |
             direktiv action id is an UUID. 
             For development it can be set to 'development'
-        - name: Direktiv-TempDirunknown
+        - name: Direktiv-TempDir
           in: header
           type: string
           default: /tmp
@@ -50,7 +64,15 @@ paths:
             direktiv temp dir is the working directory for that request
             For development it can be set to e.g. '/tmp'
         - name: body
-          in: bodyunknowncreate before running commands.
+          in: body
+          schema:
+            type: object
+            properties:
+              files:
+                type: array
+                items:
+                  $ref: '#/definitions/direktivFile'
+                description: File to create before running commands.
                 default: []
               commands:
                 type: array
@@ -66,7 +88,7 @@ paths:
                       description: If set to false the command will not print output to logs.
                       default: false
                     print: 
-                      type: booleanunknown
+                      type: boolean
                       description: If set to false the command will not print the full command with arguments to logs.
                       default: true
                     continue: 
@@ -96,7 +118,6 @@ paths:
                       hosts: localhost
                       connection: local 
                       tasks:
-
                       - name: "ls on localhost"
                         shell: "ls -l"
                         register: "output"
@@ -114,6 +135,18 @@ paths:
               input:
                 commands:
                 - command: ansible-playbook playbook.yaml
+      - title: Custom ansible.cfg
+        content: |-
+          - id: ansible
+            type: action
+            action:
+              function: ansible
+              files: 
+              - key: ansible.cfg
+                scope: workflow
+              input:
+                commands:
+                - command: ansible-config view
       x-direktiv:  
         cmds:
         - action: exec
