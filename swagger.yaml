@@ -10,7 +10,8 @@ info:
     issues: https://github.com/direktiv-apps/ansible/issues
     url: https://github.com/direktiv-apps/ansible  
     categories:
-    - unknown
+    - build
+    - infrastructure
     license: |-
       [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
     long-description: >-

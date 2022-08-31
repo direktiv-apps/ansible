@@ -34,7 +34,8 @@ func init() {
     "version": "1.0",
     "x-direktiv-meta": {
       "categories": [
-        "unknown"
+        "build",
+        "infrastructure"
       ],
       "container": "direktiv.azurecr.io/functions/ansible",
       "issues": "https://github.com/direktiv-apps/ansible/issues",
@@ -286,7 +287,8 @@ func init() {
     "version": "1.0",
     "x-direktiv-meta": {
       "categories": [
-        "unknown"
+        "build",
+        "infrastructure"
       ],
       "container": "direktiv.azurecr.io/functions/ansible",
       "issues": "https://github.com/direktiv-apps/ansible/issues",
