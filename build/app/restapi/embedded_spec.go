@@ -39,7 +39,7 @@ func init() {
       "container": "direktiv.azurecr.io/functions/ansible",
       "issues": "https://github.com/direktiv-apps/ansible/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "Run ansible in Direktiv as a function ansible 2.13.3 gcp, azure, aws",
+      "long-description": "This function provides Ansible in Direktiv. Ansible version 2.13.3 is installed with the following modules:\n- amazon.aws\n- google.cloud\n- azure.azcollection\n\nThe default configuration in ` + "`" + `ansible.cfg` + "`" + ` can be overwritten with either DirektivFiles or Direktiv variables.\n\n*Default ansible.cfg*\n` + "`" + `` + "`" + `` + "`" + ` [defaults]\ninventory = hosts\nhost_key_checking = False\n` + "`" + `` + "`" + `` + "`" + ` ",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/ansible"
     }
@@ -141,11 +141,27 @@ func init() {
             "examples": {
               "ansible": [
                 {
-                  "result": null,
+                  "result": {
+                    "custom_stats": {},
+                    "global_custom_stats": {},
+                    "plays": [
+                      {
+                        "play": {
+                          "duration": {
+                            "end": "2022-08-31T11:55:44.265820Z",
+                            "start": "2022-08-31T11:55:40.276975Z"
+                          },
+                          "id": "1ab65ae3-cbb9-49dc-b739-000000000005",
+                          "name": "Ansible Playbook"
+                        },
+                        "tasks": null
+                      }
+                    ]
+                  },
                   "success": true
                 },
                 {
-                  "result": null,
+                  "result": "[defaults]\ninventory = hosts\nhost_key_checking = False",
                   "success": true
                 }
               ]
@@ -192,12 +208,16 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    input: \n      commands:\n      - command: Example of running ansible",
-            "title": "Basic"
+            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    input: \n      files: \n      - name: playbook.yaml\n        data: |\n          ---\n          - name: \"Ansible Playbook\"\n            hosts: localhost\n            connection: local \n            tasks:\n            - name: \"ls on localhost\"\n              shell: \"ls -l\"\n              register: \"output\"\n      commands:\n      - command: ansible-playbook playbook.yaml",
+            "title": "Playbook with DirektivFiles"
           },
           {
-            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    input: \n      files:\n      - name: hello.txt\n        data: Hello World\n        mode: '0755'\n      commands:\n      - command: Example of running ansible",
-            "title": "Advanced"
+            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    files: \n    - key: playbook.yaml\n      scope: workflow\n    input:\n      commands:\n      - command: ansible-playbook playbook.yaml",
+            "title": "Playbook with variables"
+          },
+          {
+            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    files: \n    - key: ansible.cfg\n      scope: workflow\n    input:\n      commands:\n      - command: ansible-config view",
+            "title": "Custom ansible.cfg"
           }
         ],
         "x-direktiv-function": "functions:\n- id: ansible\n  image: direktiv.azurecr.io/functions/ansible:1.0\n  type: knative-workflow"
@@ -271,7 +291,7 @@ func init() {
       "container": "direktiv.azurecr.io/functions/ansible",
       "issues": "https://github.com/direktiv-apps/ansible/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "Run ansible in Direktiv as a function ansible 2.13.3 gcp, azure, aws",
+      "long-description": "This function provides Ansible in Direktiv. Ansible version 2.13.3 is installed with the following modules:\n- amazon.aws\n- google.cloud\n- azure.azcollection\n\nThe default configuration in ` + "`" + `ansible.cfg` + "`" + ` can be overwritten with either DirektivFiles or Direktiv variables.\n\n*Default ansible.cfg*\n` + "`" + `` + "`" + `` + "`" + ` [defaults]\ninventory = hosts\nhost_key_checking = False\n` + "`" + `` + "`" + `` + "`" + ` ",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/ansible"
     }
@@ -311,11 +331,27 @@ func init() {
             "examples": {
               "ansible": [
                 {
-                  "result": null,
+                  "result": {
+                    "custom_stats": {},
+                    "global_custom_stats": {},
+                    "plays": [
+                      {
+                        "play": {
+                          "duration": {
+                            "end": "2022-08-31T11:55:44.265820Z",
+                            "start": "2022-08-31T11:55:40.276975Z"
+                          },
+                          "id": "1ab65ae3-cbb9-49dc-b739-000000000005",
+                          "name": "Ansible Playbook"
+                        },
+                        "tasks": []
+                      }
+                    ]
+                  },
                   "success": true
                 },
                 {
-                  "result": null,
+                  "result": "[defaults]\ninventory = hosts\nhost_key_checking = False",
                   "success": true
                 }
               ]
@@ -362,12 +398,16 @@ func init() {
         },
         "x-direktiv-examples": [
           {
-            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    input: \n      commands:\n      - command: Example of running ansible",
-            "title": "Basic"
+            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    input: \n      files: \n      - name: playbook.yaml\n        data: |\n          ---\n          - name: \"Ansible Playbook\"\n            hosts: localhost\n            connection: local \n            tasks:\n            - name: \"ls on localhost\"\n              shell: \"ls -l\"\n              register: \"output\"\n      commands:\n      - command: ansible-playbook playbook.yaml",
+            "title": "Playbook with DirektivFiles"
           },
           {
-            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    input: \n      files:\n      - name: hello.txt\n        data: Hello World\n        mode: '0755'\n      commands:\n      - command: Example of running ansible",
-            "title": "Advanced"
+            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    files: \n    - key: playbook.yaml\n      scope: workflow\n    input:\n      commands:\n      - command: ansible-playbook playbook.yaml",
+            "title": "Playbook with variables"
+          },
+          {
+            "content": "- id: ansible\n  type: action\n  action:\n    function: ansible\n    files: \n    - key: ansible.cfg\n      scope: workflow\n    input:\n      commands:\n      - command: ansible-config view",
+            "title": "Custom ansible.cfg"
           }
         ],
         "x-direktiv-function": "functions:\n- id: ansible\n  image: direktiv.azurecr.io/functions/ansible:1.0\n  type: knative-workflow"

@@ -19,9 +19,13 @@ This function provides Ansible in Direktiv. Ansible version 2.13.3 is installed 
 - google.cloud
 - azure.azcollection
 
-
-
 The default configuration in `ansible.cfg` can be overwritten with either DirektivFiles or Direktiv variables.
+
+*Default ansible.cfg*
+``` [defaults]
+inventory = hosts
+host_key_checking = False
+``` 
 
 ### Example(s)
   #### Function Configuration
@@ -109,11 +113,27 @@ functions:
 ```json
 [
   {
-    "result": null,
+    "result": {
+      "custom_stats": {},
+      "global_custom_stats": {},
+      "plays": [
+        {
+          "play": {
+            "duration": {
+              "end": "2022-08-31T11:55:44.265820Z",
+              "start": "2022-08-31T11:55:40.276975Z"
+            },
+            "id": "1ab65ae3-cbb9-49dc-b739-000000000005",
+            "name": "Ansible Playbook"
+          },
+          "tasks": []
+        }
+      ]
+    },
     "success": true
   },
   {
-    "result": null,
+    "result": "[defaults]\ninventory = hosts\nhost_key_checking = False",
     "success": true
   }
 ]
