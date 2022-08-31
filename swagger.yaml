@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: Ansible in Direktiv
+  description: Run ansible in Direktiv
   title: ansible
   version: "1.0"
   x-direktiv-meta:
@@ -10,19 +10,12 @@ info:
     issues: https://github.com/direktiv-apps/ansible/issues
     url: https://github.com/direktiv-apps/ansible  
     categories:
-    - unknown
+    - build
+    - infrastructure
     license: |-
       [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
     long-description: >-
-      This function runs Ansible in Direktiv. The version installed is X.X.X. The following modules are pre-installed:
-
-      - 
-
-      - 
-
-      - 
-
-
+      Run ansible in Direktiv as a function
       ansible 2.13.3
       gcp, azure, aws
 consumes:
@@ -36,12 +29,7 @@ paths:
     delete:
       parameters:
         - name: Direktiv-ActionID
-          in: header
-          type: string
-          description: |
-            On cancel Direktiv sends a DELETE request to
-            the action with id in the header
-      x-direktiv:
+          in: headerunknown
         cancel: echo 'cancel {{ .DirektivActionID }}'
       responses:
         200:
@@ -54,7 +42,7 @@ paths:
           description: |
             direktiv action id is an UUID. 
             For development it can be set to 'development'
-        - name: Direktiv-TempDir
+        - name: Direktiv-TempDirunknown
           in: header
           type: string
           default: /tmp
@@ -62,15 +50,7 @@ paths:
             direktiv temp dir is the working directory for that request
             For development it can be set to e.g. '/tmp'
         - name: body
-          in: body
-          schema:
-            type: object
-            properties:
-              files:
-                type: array
-                items:
-                  $ref: '#/definitions/direktivFile'
-                description: File to create before running commands.
+          in: bodyunknowncreate before running commands.
                 default: []
               commands:
                 type: array
@@ -86,7 +66,7 @@ paths:
                       description: If set to false the command will not print output to logs.
                       default: false
                     print: 
-                      type: boolean
+                      type: booleanunknown
                       description: If set to false the command will not print the full command with arguments to logs.
                       default: true
                     continue: 
@@ -101,41 +81,39 @@ paths:
           image: direktiv.azurecr.io/functions/ansible:1.0
           type: knative-workflow
       x-direktiv-examples:
-        # ADD MORE EXAMPLES HERE
-        - title: Simple Playbook
-          content: |-
-            - id: ansible
-              type: action
-              action:
-                function: ansible
-                input: 
-                  files: 
-                  - name: playbook.yaml
-                    data: |
-                      ---
-                      - name: "Ansible Playbook"
-                        hosts: localhost
-                        connection: local 
-                        tasks:
+      - title: Playbook with DirektivFiles
+        content: |-
+          - id: ansible
+            type: action
+            action:
+              function: ansible
+              input: 
+                files: 
+                - name: playbook.yaml
+                  data: |
+                    ---
+                    - name: "Ansible Playbook"
+                      hosts: localhost
+                      connection: local 
+                      tasks:
 
-                        - name: "ls on localhost"
-                          shell: "ls -l"
-                          register: "output"
-                  commands:
-                  - command: ansible-playbook playbook.yaml
-        - title: Advanced
-          content: |-
-            - id: ansible
-              type: action
-              action:
-                function: ansible
-                input: 
-                  files:
-                  - name: hello.txt
-                    data: Hello World
-                    mode: '0755'
-                  commands:
-                  - command: Example of running ansible
+                      - name: "ls on localhost"
+                        shell: "ls -l"
+                        register: "output"
+                commands:
+                - command: ansible-playbook playbook.yaml
+      - title: Playbook with variables
+        content: |-
+          - id: ansible
+            type: action
+            action:
+              function: ansible
+              files: 
+              - key: playbook.yaml
+                scope: workflow
+              input:
+                commands:
+                - command: ansible-playbook playbook.yaml
       x-direktiv:  
         cmds:
         - action: exec
@@ -182,14 +160,12 @@ paths:
                       additionalProperties: {}
         default:
           description: generic error response
-          headers:,
-		{
-			"name": "playbook.yaml",
-			"data": "---\n- name: "Playing with Ansible and Git"\nhosts: localhost\nconnection: local\ntasks:\n- name: "just execute a ls -lrt command"
-      shell: "ls -lrt"
-      register: "output""
-
-		}
+          headers:
+            Direktiv-ErrorCode:
+              type: string
+            Direktiv-ErrorMessage:
+              type: string
+          schema:
             $ref: "#/definitions/error"
 definitions:
   direktivFile:
