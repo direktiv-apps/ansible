@@ -39,7 +39,7 @@ func init() {
       "container": "direktiv.azurecr.io/functions/ansible",
       "issues": "https://github.com/direktiv-apps/ansible/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "Run ansible in Direktiv as a function",
+      "long-description": "Run ansible in Direktiv as a function ansible 2.13.3 gcp, azure, aws",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/ansible"
     }
@@ -169,6 +169,12 @@ func init() {
         "x-direktiv": {
           "cmds": [
             {
+              "action": "exec",
+              "exec": "/config.sh",
+              "print": false,
+              "silent": true
+            },
+            {
               "action": "foreach",
               "continue": "{{ .Item.Continue }}",
               "exec": "{{ .Item.Command }}",
@@ -177,7 +183,7 @@ func init() {
               "silent": "{{ .Item.Silent }}"
             }
           ],
-          "output": "{\n  \"ansible\": {{ index . 0 | toJson }}\n}\n"
+          "output": "{\n  \"ansible\": {{ index . 1 | toJson }}\n}\n"
         },
         "x-direktiv-errors": {
           "io.direktiv.command.error": "Command execution failed",
@@ -265,7 +271,7 @@ func init() {
       "container": "direktiv.azurecr.io/functions/ansible",
       "issues": "https://github.com/direktiv-apps/ansible/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "Run ansible in Direktiv as a function",
+      "long-description": "Run ansible in Direktiv as a function ansible 2.13.3 gcp, azure, aws",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/ansible"
     }
@@ -333,6 +339,12 @@ func init() {
         "x-direktiv": {
           "cmds": [
             {
+              "action": "exec",
+              "exec": "/config.sh",
+              "print": false,
+              "silent": true
+            },
+            {
               "action": "foreach",
               "continue": "{{ .Item.Continue }}",
               "exec": "{{ .Item.Command }}",
@@ -341,7 +353,7 @@ func init() {
               "silent": "{{ .Item.Silent }}"
             }
           ],
-          "output": "{\n  \"ansible\": {{ index . 0 | toJson }}\n}\n"
+          "output": "{\n  \"ansible\": {{ index . 1 | toJson }}\n}\n"
         },
         "x-direktiv-errors": {
           "io.direktiv.command.error": "Command execution failed",

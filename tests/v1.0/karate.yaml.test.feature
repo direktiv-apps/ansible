@@ -17,27 +17,17 @@ Scenario: get request
 	{
 		"files": [
 			{
-			"name": "hosts",
-			"data": "[myvirtualmachines]\nec2-52-59-26-1.eu-central-1.compute.amazonaws.com\n"
+			"name": "ansible.cfg",
+			"data": "[default]\nlocalhost"
 
 		}
 		]
 		,
 		"commands": [
-			{
-			"command": "cat hosts",
-			"silent": true,
-			"print": false,
-		},
-			{
-			"command": "env",
-			"silent": true,
-			"print": false,
-		},
 		{
-			"command": "ansible all --list-hosts",
-			"silent": true,
-			"print": false,
+			"command": "ansible all -m ping",
+			"silent": false,
+			"print": true,
 		}
 		]
 	}

@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: Run ansible in Direktiv
+  description: Ansible in Direktiv
   title: ansible
   version: "1.0"
   x-direktiv-meta:
@@ -14,7 +14,15 @@ info:
     license: |-
       [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
     long-description: >-
-      Run ansible in Direktiv as a function
+      This function runs Ansible in Direktiv. The version installed is X.X.X. The following modules are pre-installed:
+
+      - 
+
+      - 
+
+      - 
+
+
       ansible 2.13.3
       gcp, azure, aws
 consumes:
@@ -94,15 +102,27 @@ paths:
           type: knative-workflow
       x-direktiv-examples:
         # ADD MORE EXAMPLES HERE
-        - title: Basic
+        - title: Simple Playbook
           content: |-
             - id: ansible
               type: action
               action:
                 function: ansible
                 input: 
+                  files: 
+                  - name: playbook.yaml
+                    data: |
+                      ---
+                      - name: "Ansible Playbook"
+                        hosts: localhost
+                        connection: local 
+                        tasks:
+
+                        - name: "ls on localhost"
+                          shell: "ls -l"
+                          register: "output"
                   commands:
-                  - command: Example of running ansible
+                  - command: ansible-playbook playbook.yaml
         - title: Advanced
           content: |-
             - id: ansible
@@ -119,7 +139,9 @@ paths:
       x-direktiv:  
         cmds:
         - action: exec
-          exec: echo {{ . }}
+          exec: /config.sh
+          print: false
+          silent: true
         - action: foreach
           loop: .Commands
           exec: '{{ .Item.Command }}'
@@ -128,7 +150,7 @@ paths:
           continue: '{{ .Item.Continue }}'
         output: |
           {
-            "ansible": {{ index . 0 | toJson }}
+            "ansible": {{ index . 1 | toJson }}
           }
       x-direktiv-errors:
         io.direktiv.command.error: Command execution failed
@@ -160,12 +182,14 @@ paths:
                       additionalProperties: {}
         default:
           description: generic error response
-          headers:
-            Direktiv-ErrorCode:
-              type: string
-            Direktiv-ErrorMessage:
-              type: string
-          schema:
+          headers:,
+		{
+			"name": "playbook.yaml",
+			"data": "---\n- name: "Playing with Ansible and Git"\nhosts: localhost\nconnection: local\ntasks:\n- name: "just execute a ls -lrt command"
+      shell: "ls -lrt"
+      register: "output""
+
+		}
             $ref: "#/definitions/error"
 definitions:
   direktivFile:

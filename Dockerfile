@@ -50,24 +50,28 @@ RUN ssh-keyscan ec2-52-59-26-1.eu-central-1.compute.amazonaws.com  >> /root/.ssh
 # RUN scp -i /deleteme1.pem /tmp/jens ubuntu@ec2-52-59-26-1.eu-central-1.compute.amazonaws.com:/tmp
 
 # RUN mkdir -p /etc/ansible/
-RUN echo '[myvirtualmachines]\nec2-52-59-26-1.eu-central-1.compute.amazonaws.com\n'\
-    '[all:vars]\n' \
-    'ansible_user=ubuntu' \
-    >> hosts
-RUN cat hosts
+# RUN echo '[myvirtualmachines]\nec2-52-59-26-1.eu-central-1.compute.amazonaws.com\n'\
+#     '[all:vars]\n' \
+#     'ansible_user=ubuntu' \
+#     >> hosts
+# RUN cat hosts
 
-RUN echo '[defaults]\ninventory = hosts' \
-    >> ansible.cfg
-RUN cat ansible.cfg
+# RUN echo '[defaults]\ninventory = hosts' \
+#     >> ansible.cfg
+# RUN cat ansible.cfg
 
 ENV ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 ENV ANSIBLE_STDOUT_CALLBACK=json
 ENV ANSIBLE_NOCOLOR=true
 
+COPY ansible_default.cfg /
+COPY config.sh /
+RUN chmod 755 /config.sh
+
 # ENV DEFAULT_HOST_LIST=hosts
 # ENV ANSIBLE_CONFIG=ansible.cfg
 
-RUN echo 1 && ansible all -m ping
+# RUN echo 1 && ansible all -m ping
 
 # DON'T CHANGE BELOW 
 COPY --from=build /application /bin/application
