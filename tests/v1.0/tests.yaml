@@ -1,0 +1,25 @@
+url: ""
+functions:
+- type: knative-workflow
+  id: ansible
+  image: direktiv.azurecr.io/functions/ansible:test
+states:
+- id: state0
+  type: action
+  action:
+    function: ansible
+    input:
+      commands:
+      - command: Example of running ansible
+  transition: state1
+- id: state1
+  type: action
+  action:
+    function: ansible
+    input:
+      commands:
+      - command: Example of running ansible
+      files:
+      - data: Hello World
+        mode: "0755"
+        name: hello.txt
