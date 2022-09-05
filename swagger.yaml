@@ -4,7 +4,7 @@ info:
   title: ansible
   version: "1.0"
   x-direktiv-meta:
-    container: direktiv.azurecr.io/functions/ansible
+    container: gcr.io/direktiv/functions/ansible
     maintainer: |-
       [direktiv.io](https://www.direktiv.io) 
     issues: https://github.com/direktiv-apps/ansible/issues
@@ -111,7 +111,7 @@ paths:
       x-direktiv-function: |-
         functions:
         - id: ansible
-          image: direktiv.azurecr.io/functions/ansible:1.0
+          image: gcr.io/direktiv/functions/ansible:1.0
           type: knative-workflow
       x-direktiv-examples:
       - title: Playbook with DirektivFiles
