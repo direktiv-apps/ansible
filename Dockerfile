@@ -17,7 +17,7 @@ RUN go build -tags osusergo,netgo -o /application cmd/ansible-server/main.go;
 
 FROM ubuntu:22.04
 
-RUN apt-get update && apt-get install ca-certificates python3 pip -y
+RUN apt-get update && apt-get install ca-certificates python3 pip git -y
 
 RUN apt-get install libkrb5-dev -y
 RUN pip3 install --upgrade pip; \
