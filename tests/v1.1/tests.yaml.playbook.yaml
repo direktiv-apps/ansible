@@ -1,0 +1,9 @@
+---
+- name: "Ansible Playbook"
+  hosts: localhost
+  connection: local 
+  tasks:
+
+  - name: "ls on localhost"
+    shell: "ls -l"
+    register: "output"
