@@ -14,7 +14,7 @@ Run ansible in Direktiv
 
 ## About ansible
 
-This function provides Ansible in Direktiv. Ansible version 2.13.3 is installed with the following modules:
+This function provides Ansible in Direktiv. Ansible version 2.14.1 is installed with the following modules:
 - amazon.aws
 - google.cloud
 - azure.azcollection

@@ -40,7 +40,7 @@ func init() {
       "container": "gcr.io/direktiv/functions/ansible",
       "issues": "https://github.com/direktiv-apps/ansible/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "This function provides Ansible in Direktiv. Ansible version 2.13.3 is installed with the following modules:\n- amazon.aws\n- google.cloud\n- azure.azcollection\n\nThe default configuration in ` + "`" + `ansible.cfg` + "`" + ` can be overwritten with either DirektivFiles or Direktiv variables.\n\n*Default ansible.cfg*\n` + "`" + `` + "`" + `` + "`" + ` [defaults]\ninventory = hosts\nhost_key_checking = False\n` + "`" + `` + "`" + `` + "`" + ` ",
+      "long-description": "This function provides Ansible in Direktiv. Ansible version 2.14.1 is installed with the following modules:\n- amazon.aws\n- google.cloud\n- azure.azcollection\n\nThe default configuration in ` + "`" + `ansible.cfg` + "`" + ` can be overwritten with either DirektivFiles or Direktiv variables.\n\n*Default ansible.cfg*\n` + "`" + `` + "`" + `` + "`" + ` [defaults]\ninventory = hosts\nhost_key_checking = False\n` + "`" + `` + "`" + `` + "`" + ` ",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/ansible"
     }
@@ -293,7 +293,7 @@ func init() {
       "container": "gcr.io/direktiv/functions/ansible",
       "issues": "https://github.com/direktiv-apps/ansible/issues",
       "license": "[Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)",
-      "long-description": "This function provides Ansible in Direktiv. Ansible version 2.13.3 is installed with the following modules:\n- amazon.aws\n- google.cloud\n- azure.azcollection\n\nThe default configuration in ` + "`" + `ansible.cfg` + "`" + ` can be overwritten with either DirektivFiles or Direktiv variables.\n\n*Default ansible.cfg*\n` + "`" + `` + "`" + `` + "`" + ` [defaults]\ninventory = hosts\nhost_key_checking = False\n` + "`" + `` + "`" + `` + "`" + ` ",
+      "long-description": "This function provides Ansible in Direktiv. Ansible version 2.14.1 is installed with the following modules:\n- amazon.aws\n- google.cloud\n- azure.azcollection\n\nThe default configuration in ` + "`" + `ansible.cfg` + "`" + ` can be overwritten with either DirektivFiles or Direktiv variables.\n\n*Default ansible.cfg*\n` + "`" + `` + "`" + `` + "`" + ` [defaults]\ninventory = hosts\nhost_key_checking = False\n` + "`" + `` + "`" + `` + "`" + ` ",
       "maintainer": "[direktiv.io](https://www.direktiv.io) ",
       "url": "https://github.com/direktiv-apps/ansible"
     }
