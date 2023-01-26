@@ -3,6 +3,7 @@ package operations
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/direktiv/apps/go/pkg/apps"
 	"github.com/go-openapi/runtime/middleware"
@@ -42,13 +43,19 @@ func DeleteDirektivHandle(params DeleteParams) middleware.Responder {
 	ri.Logger().Infof("cancelling action id %v", actionId)
 	cinfo.cf()
 
-	cmd, err := templateString("echo 'cancel {{ .DirektivActionID }}'", params)
+	cmd, err := templateString("echo 'cancel {{ .DirektivActionID }}'", params, ri.Dir())
 	if err != nil {
 		ri.Logger().Infof("can not template cancel command: %v", err)
 		return NewDeleteOK()
 	}
 
-	_, err = runCmd(context.Background(), cmd, []string{}, "", false, true, ri)
+	path, err := os.Getwd()
+	if err != nil {
+		ri.Logger().Infof("can not template cancel command: %v", err)
+		return NewDeleteOK()
+	}
+
+	_, err = runCmd(context.Background(), cmd, []string{}, "", false, true, ri, path)
 	if err != nil {
 		ri.Logger().Infof("error running cancel function: %v", err)
 	}

@@ -5,7 +5,7 @@ Run ansible in Direktiv
 
 ---
 - #### Categories: build, infrastructure
-- #### Image: direktiv.azurecr.io/functions/ansible 
+- #### Image: gcr.io/direktiv/functions/ansible 
 - #### License: [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0)
 - #### Issue Tracking: https://github.com/direktiv-apps/ansible/issues
 - #### URL: https://github.com/direktiv-apps/ansible
@@ -32,7 +32,7 @@ host_key_checking = False
 ```yaml
 functions:
 - id: ansible
-  image: direktiv.azurecr.io/functions/ansible:1.0
+  image: gcr.io/direktiv/functions/ansible:1.0
   type: knative-workflow
 ```
    #### Playbook with DirektivFiles

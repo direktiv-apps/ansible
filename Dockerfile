@@ -40,7 +40,6 @@ RUN ansible --version
 RUN apt-get install openssh-client -y
 
 RUN mkdir -p /root/.ssh/
-RUN ssh-keyscan ec2-52-59-26-1.eu-central-1.compute.amazonaws.com  >> /root/.ssh/known_hosts
 
 ENV ANSIBLE_LOAD_CALLBACK_PLUGINS=1
 ENV ANSIBLE_STDOUT_CALLBACK=json

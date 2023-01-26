@@ -3,8 +3,10 @@ package operations
 import (
 	"bytes"
 	"context"
+	"crypto/md5"
 	"crypto/tls"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"html"
@@ -15,6 +17,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -54,12 +57,40 @@ func deref(dd interface{}) interface{} {
 	}
 }
 
-func templateString(tmplIn string, data interface{}) (string, error) {
+func (a *addOnFunctions) asFile(f interface{}) interface{} {
+
+	b, err := json.MarshalIndent(f, "", "\t")
+	if err != nil {
+		return fmt.Sprintf("error: %v", err)
+	}
+
+	hash := md5.Sum(b)
+	name := fmt.Sprintf("%s.json", hex.EncodeToString(hash[:]))
+
+	err = os.WriteFile(filepath.Join(a.dir, name), b, 0644)
+	if err != nil {
+		return fmt.Sprintf("error: %v", err)
+	}
+
+	return name
+
+}
+
+type addOnFunctions struct {
+	dir string
+}
+
+func templateString(tmplIn string, data interface{}, dir string) (string, error) {
+
+	aof := &addOnFunctions{
+		dir: dir,
+	}
 
 	tmpl, err := template.New("base").Funcs(sprig.FuncMap()).Funcs(template.FuncMap{
 		"fileExists": fileExists,
 		"deref":      deref,
 		"file64":     file64,
+		"asFile":     aof.asFile,
 	}).Parse(tmplIn)
 
 	if err != nil {
@@ -83,7 +114,7 @@ func templateString(tmplIn string, data interface{}) (string, error) {
 
 func convertTemplateToBool(template string, data interface{}, defaultValue bool) bool {
 
-	out, err := templateString(template, data)
+	out, err := templateString(template, data, "")
 	if err != nil {
 		return defaultValue
 	}
@@ -98,7 +129,8 @@ func convertTemplateToBool(template string, data interface{}, defaultValue bool)
 }
 
 func runCmd(ctx context.Context, cmdString string, envs []string,
-	output string, silent, print bool, ri *apps.RequestInfo) (map[string]interface{}, error) {
+	output string, silent, print bool, ri *apps.RequestInfo,
+	workingDir string) (map[string]interface{}, error) {
 
 	ir := make(map[string]interface{})
 	ir[successKey] = false
@@ -136,10 +168,23 @@ func runCmd(ctx context.Context, cmdString string, envs []string,
 	cmd := exec.CommandContext(ctx, bin, argsIn...)
 	cmd.Stdout = mwStdout
 	cmd.Stderr = mwStdErr
-	cmd.Dir = ri.Dir()
+
+	wd := ri.Dir()
+
+	// working dir
+	if workingDir != "" {
+		err = os.MkdirAll(workingDir, 0755)
+		if err != nil {
+			ir[resultKey] = err.Error()
+			return ir, err
+		}
+		wd = workingDir
+	}
+
+	cmd.Dir = wd
 
 	// change HOME
-	curEnvs := append(os.Environ(), fmt.Sprintf("HOME=%s", ri.Dir()))
+	curEnvs := append(os.Environ(), fmt.Sprintf("HOME=%s", wd))
 	cmd.Env = append(curEnvs, envs...)
 
 	if print {
@@ -164,11 +209,17 @@ func runCmd(ctx context.Context, cmdString string, envs []string,
 	// output check
 	b := o.Bytes()
 	if output != "" {
-		b, err = os.ReadFile(output)
+
+		fn := filepath.Join(ri.Dir(), output)
+		b, err = os.ReadFile(fn)
 		if err != nil {
-			ir[resultKey] = err.Error()
-			return ir, err
+			ri.Logger().Infof("output file %s not used (%v)", output, err)
+			// ir[resultKey] = err.Error()
+			// return ir, err
+			b = o.Bytes()
 		}
+
+		defer os.Remove(fn)
 	}
 
 	var rj interface{}
@@ -177,6 +228,8 @@ func runCmd(ctx context.Context, cmdString string, envs []string,
 		rj = apps.ToJSON(string(b))
 	}
 	ir[resultKey] = rj
+
+	// delete output file
 
 	return ir, nil
 
@@ -210,12 +263,19 @@ func doHttpRequest(debug bool, method, u, user, pwd string,
 	}
 	req.Close = true
 
-	for k, v := range headers {
-		req.Header.Add(k, v)
-	}
-
 	if user != "" {
 		req.SetBasicAuth(user, pwd)
+	}
+
+	for k, v := range headers {
+
+		// if it it is Authorization, we do a set
+		if k == "Authorization" && v != "" {
+			req.Header.Set(k, v)
+		} else {
+			req.Header.Add(k, v)
+		}
+
 	}
 
 	jar, err := cookiejar.New(&cookiejar.Options{
@@ -235,7 +295,7 @@ func doHttpRequest(debug bool, method, u, user, pwd string,
 		fmt.Printf("method: %s, insecure: %v\n", method, insecure)
 		fmt.Printf("url: %s\n", req.URL.String())
 		fmt.Println("Headers:")
-		for k, v := range headers {
+		for k, v := range req.Header {
 			fmt.Printf("%v = %v\n", k, v)
 		}
 	}
