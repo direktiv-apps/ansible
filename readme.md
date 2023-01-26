@@ -1,5 +1,5 @@
 
-# ansible 1.0
+# ansible 1.1
 
 Run ansible in Direktiv
 
@@ -32,7 +32,7 @@ host_key_checking = False
 ```yaml
 functions:
 - id: ansible
-  image: gcr.io/direktiv/functions/ansible:1.0
+  image: gcr.io/direktiv/functions/ansible:1.1
   type: knative-workflow
 ```
    #### Playbook with DirektivFiles

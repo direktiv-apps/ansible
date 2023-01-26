@@ -31,7 +31,7 @@ func init() {
   "info": {
     "description": "Run ansible in Direktiv",
     "title": "ansible",
-    "version": "1.0",
+    "version": "1.1",
     "x-direktiv-meta": {
       "categories": [
         "build",
@@ -221,7 +221,7 @@ func init() {
             "title": "Custom ansible.cfg"
           }
         ],
-        "x-direktiv-function": "functions:\n- id: ansible\n  image: gcr.io/direktiv/functions/ansible:1.0\n  type: knative-workflow"
+        "x-direktiv-function": "functions:\n- id: ansible\n  image: gcr.io/direktiv/functions/ansible:1.1\n  type: knative-workflow"
       },
       "delete": {
         "parameters": [
@@ -284,7 +284,7 @@ func init() {
   "info": {
     "description": "Run ansible in Direktiv",
     "title": "ansible",
-    "version": "1.0",
+    "version": "1.1",
     "x-direktiv-meta": {
       "categories": [
         "build",
@@ -412,7 +412,7 @@ func init() {
             "title": "Custom ansible.cfg"
           }
         ],
-        "x-direktiv-function": "functions:\n- id: ansible\n  image: gcr.io/direktiv/functions/ansible:1.0\n  type: knative-workflow"
+        "x-direktiv-function": "functions:\n- id: ansible\n  image: gcr.io/direktiv/functions/ansible:1.1\n  type: knative-workflow"
       },
       "delete": {
         "parameters": [

@@ -1,0 +1,40 @@
+url: ""
+functions:
+- type: knative-workflow
+  id: ansible
+  image: gcr.io/direktiv/functions/ansible:test
+states:
+- id: state0
+  type: action
+  action:
+    function: ansible
+    input:
+      commands:
+      - command: ansible-playbook playbook.yaml
+      files:
+      - data: "---\n- name: \"Ansible Playbook\"\n  hosts: localhost\n  connection:
+          local \n  tasks:\n  - name: \"ls on localhost\"\n    shell: \"ls -l\"\n
+          \   register: \"output\"\n"
+        name: playbook.yaml
+  transition: state1
+- id: state1
+  type: action
+  action:
+    function: ansible
+    input:
+      commands:
+      - command: ansible-playbook playbook.yaml
+    files:
+    - key: playbook.yaml
+      scope: workflow
+  transition: state2
+- id: state2
+  type: action
+  action:
+    function: ansible
+    input:
+      commands:
+      - command: ansible-config view
+    files:
+    - key: ansible.cfg
+      scope: workflow
